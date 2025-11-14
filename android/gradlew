@@ -1,0 +1,8 @@
+#!/usr/bin/env sh
+APP_HOME="`dirname "$0"`"
+GRADLE_WRAPPER_JAR="$APP_HOME/gradle/wrapper/gradle-wrapper.jar"
+if [ ! -f "$GRADLE_WRAPPER_JAR" ]; then
+  echo "Gradle wrapper JAR missing. Open in Android Studio to regenerate." >&2
+  exit 1
+fi
+exec java -Xmx64m -cp "$GRADLE_WRAPPER_JAR" org.gradle.wrapper.GradleWrapperMain "$@"
