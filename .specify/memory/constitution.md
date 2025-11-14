@@ -1,50 +1,40 @@
-# [PROJECT_NAME] Constitution
-<!-- Example: Spec Constitution, TaskFlow Constitution, etc. -->
+# Danish–English Offline Dictionary Constitution
 
 ## Core Principles
 
-### [PRINCIPLE_1_NAME]
-<!-- Example: I. Library-First -->
-[PRINCIPLE_1_DESCRIPTION]
-<!-- Example: Every feature starts as a standalone library; Libraries must be self-contained, independently testable, documented; Clear purpose required - no organizational-only libraries -->
+### I. Offline-Only
+- The app must function 100% without internet access.
+- Do not request network permissions (no INTERNET, no network state). No telemetry, analytics, ads, or remote services.
+- All data and computation live on-device.
 
-### [PRINCIPLE_2_NAME]
-<!-- Example: II. CLI Interface -->
-[PRINCIPLE_2_DESCRIPTION]
-<!-- Example: Every library exposes functionality via CLI; Text in/out protocol: stdin/args → stdout, errors → stderr; Support JSON + human-readable formats -->
+### II. Simple, Fast Local Search
+- Local database packaged with the app; lookups run entirely on-device.
+- Support Danish→English and English→Danish queries with case/diacritics-insensitive matching (æ, ø, å) and basic prefix search.
+- Prefer SQLite with FTS via Room; deterministic results for the same input.
 
-### [PRINCIPLE_3_NAME]
-<!-- Example: III. Test-First (NON-NEGOTIABLE) -->
-[PRINCIPLE_3_DESCRIPTION]
-<!-- Example: TDD mandatory: Tests written → User approved → Tests fail → Then implement; Red-Green-Refactor cycle strictly enforced -->
+### III. Test-First
+- Write tests before implementation (red → green → refactor).
+- Cover exact match, no-result, diacritics normalization, and both language directions.
+- Tests and builds run with networking disabled.
 
-### [PRINCIPLE_4_NAME]
-<!-- Example: IV. Integration Testing -->
-[PRINCIPLE_4_DESCRIPTION]
-<!-- Example: Focus areas requiring integration tests: New library contract tests, Contract changes, Inter-service communication, Shared schemas -->
+### IV. Simplicity & Versioning
+- Minimal dependencies and a straightforward single-screen UX (search, results, entry detail).
+- Version code, schema, and data; document any breaking change with a migration.
+- Add a gitignore file and add irrelevant and sensitive contents to be ignored and not tracked.
 
-### [PRINCIPLE_5_NAME]
-<!-- Example: V. Observability, VI. Versioning & Breaking Changes, VII. Simplicity -->
-[PRINCIPLE_5_DESCRIPTION]
-<!-- Example: Text I/O ensures debuggability; Structured logging required; Or: MAJOR.MINOR.BUILD format; Or: Start simple, YAGNI principles -->
+## Constraints & Standards
+- Platform: Android app written in Kotlin.
+- Data: Prepackaged, read-only SQLite/FTS database bundled with the app; no runtime downloads.
+- Privacy/Security: No accounts, no background services, no external calls.
+- Accessibility and i18n: Respect system font scaling and right/left language display as appropriate.
 
-## [SECTION_2_NAME]
-<!-- Example: Additional Constraints, Security Requirements, Performance Standards, etc. -->
-
-[SECTION_2_CONTENT]
-<!-- Example: Technology stack requirements, compliance standards, deployment policies, etc. -->
-
-## [SECTION_3_NAME]
-<!-- Example: Development Workflow, Review Process, Quality Gates, etc. -->
-
-[SECTION_3_CONTENT]
-<!-- Example: Code review requirements, testing gates, deployment approval process, etc. -->
+## Development Workflow & Quality Gates
+- Tests define behavior first; unit and small integration tests for DB and lookup.
+- CI gates: build, lint/format, and tests must pass; any schema change includes a tested migration.
+- Code review verifies offline-only compliance (no network usage) and basic performance responsiveness.
 
 ## Governance
-<!-- Example: Constitution supersedes all other practices; Amendments require documentation, approval, migration plan -->
+- This Constitution supersedes other practices for this app.
+- Amendments require updating this file and a brief migration note when the data schema changes.
 
-[GOVERNANCE_RULES]
-<!-- Example: All PRs/reviews must verify compliance; Complexity must be justified; Use [GUIDANCE_FILE] for runtime development guidance -->
-
-**Version**: [CONSTITUTION_VERSION] | **Ratified**: [RATIFICATION_DATE] | **Last Amended**: [LAST_AMENDED_DATE]
-<!-- Example: Version: 2.1.1 | Ratified: 2025-06-13 | Last Amended: 2025-07-16 -->
+**Version**: 1.0.0 | **Ratified**: 2025-11-14 | **Last Amended**: 2025-11-14
