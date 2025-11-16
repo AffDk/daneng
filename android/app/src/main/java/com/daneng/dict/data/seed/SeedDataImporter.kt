@@ -78,12 +78,34 @@ class SeedDataImporter(private val context: Context, private val db: DictionaryD
         return context.assets.open(assetPath).use { input ->
             BufferedReader(input.reader()).readLines()
                 .filter { it.isNotBlank() && !it.startsWith("#") }
-                .map { line ->
-                    // Simple CSV: head,phon,pos,syn1;syn2,example,translation
-                    val parts = line.split(',')
-                    val padded = parts + List(maxOf(0, 6 - parts.size)) { "" }
-                    padded.take(6)
-                }
+                .map { line -> parseCsvLine(line) }
         }
+    }
+    
+    private fun parseCsvLine(line: String): List<String> {
+        val result = mutableListOf<String>()
+        var current = StringBuilder()
+        var inQuotes = false
+        
+        for (i in line.indices) {
+            val ch = line[i]
+            when {
+                ch == '"' && (i == 0 || line[i-1] != '\\') -> {
+                    inQuotes = !inQuotes
+                }
+                ch == ',' && !inQuotes -> {
+                    result.add(current.toString().trim())
+                    current = StringBuilder()
+                }
+                else -> {
+                    current.append(ch)
+                }
+            }
+        }
+        result.add(current.toString().trim())
+        
+        // Pad to 6 columns
+        val padded = result + List(maxOf(0, 6 - result.size)) { "" }
+        return padded.take(6)
     }
 }
